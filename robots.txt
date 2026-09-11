@@ -1,0 +1,57 @@
+# The bills, the agenda and the companion are encrypted in data/site-data.js and
+# no crawler can read them. The PAGE SHELLS are a different matter: the home
+# hero, the navigation and the methodology text sit in the HTML in plaintext, so
+# the project's framing and positioning are readable by anyone who fetches a
+# page, password or no password.
+#
+# This file is therefore about disclosure timing, not access control. It asks
+# honest crawlers not to index a project that has not launched. It stops nobody
+# who does not care, which is why it is the weakest control here and not one to
+# rely on -- the encryption is the control.
+#
+# Remove this file at launch.
+
+User-agent: *
+Disallow: /
+
+# Named separately because several of these ignore a wildcard Disallow but honor
+# their own token. Training corpora are forever; a pre-launch draft should not be
+# in one.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
