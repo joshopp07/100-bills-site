@@ -1,0 +1,1526 @@
+/* ==========================================================================
+   Prosperity & Integrity — design system
+   One typeface, Inter, since 2026-10-01: --display for headings and statutory
+   text, --sans for running text. They are the same family; the two names keep
+   the roles separable. Inter is served from assets/fonts/ on this site, never
+   from an outside host, so the page still makes no external request.
+   ========================================================================== */
+
+/* Inter 4.1, SIL Open Font License 1.1 (assets/fonts/Inter-LICENSE.txt): one open-licensed
+   face on every device, and the face the logos are set in (D1959; the author, 2026-10-01: "we
+   should only use an open access typeface"). One variable file per style covers every weight. */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/InterVariable.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Inter";
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../fonts/InterVariable-Italic.woff2") format("woff2");
+}
+
+:root {
+  /* The system faces stay as fallbacks while Inter loads or if it cannot. */
+  --display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ink: #1a1d23;
+  --ink-soft: #444a55;
+  --ink-faint: #646a75;   /* 5.21:1 on paper, 5.44 on raised, 4.69 on --hl-bg (site review 1.33) */
+  --paper: #fbfaf7;
+  --paper-raised: #ffffff;
+  --line: #dcd8cf;
+  --line-soft: #eae7df;
+  /* The border of an input or a chip, which must hold 3:1 where --line does not:
+     3.67:1 on raised, 3.52 on paper, 3.17 on --hl-bg. */
+  --line-control: #8a857b;
+
+  /* Non-promise UI: navy in light mode, warm gray in dark (D1784). Amber is
+     retired, since it would read as Affordability. */
+  --accent: #1c3d5a;
+  --accent-press: #0f2a40;
+  --on-accent: #ffffff;
+  --accent-bg: #eef2f6;
+  --hl-bg: #f1eee6;       /* neutral highlight: search hits, the jumped-to section */
+  /* Links, the keyboard focus ring and error text get their own tokens (site review
+     1.18, 1.32, 1.38): in dark mode --accent is the color of body text. None is a
+     promise color. */
+  --link: #1c3d5a;
+  --focus: #1d5bd6;       /* 5.72:1 on paper; drawn outside the element, so it shows on navy buttons */
+  --error: #b42318;       /* 6.57:1 on raised (the password card) */
+
+  /* The promise palette (D1783), the site's color theme. --pN fills a mark,
+     --pN-on is the letter on it, --pN-text is the promise's color for text,
+     darkened in light mode to hold 4.5:1 on paper. */
+  --p1: #ba801b; --p1-on: #1a1d23; --p1-text: #8a5f14;
+  --p2: #0a5043; --p2-on: #ffffff; --p2-text: #0a5043;
+  --p3: #8d6bc3; --p3-on: #ffffff; --p3-text: #7453a8;
+  --p3-tint: #cdb9ee;  /* the Integrity symbol's accent, both modes: tie, stripes, thread */
+  /* The marks' own colors, both modes: the navy disc and the ring's three arcs
+     (scripts/round_wordmarks.py: NAVY, MUSTARD, TEAL_LT, PURPLE_LT). */
+  --cd-navy: #1c3d5a; --cd-ring-1: #ba801b; --cd-ring-2: #61bba6; --cd-ring-3: #cdb9ee;
+
+  --radius: 6px;
+  --gutter: 2.5rem;   /* one gutter for the header, the content and the footer */
+  --max-measure: 40rem;
+  --max-wide: 72rem;
+
+  color-scheme: light;
+}
+
+/* The dark theme (site review 3.8). It applies when the system asks for dark and the
+   visitor has not chosen light, or when the visitor has chosen dark: assets/js/theme.js
+   sets <html data-theme> from the header's switch. CSS cannot share one block between a
+   media query and an attribute selector, so the two blocks below are the same list and
+   must stay identical; render-test.js compares them. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #ece9e2;
+    --ink-soft: #c7c2b8;
+    --ink-faint: #9d9991;   /* 6.26:1 on paper, 5.76 on raised, 4.92 on --hl-bg */
+    --paper: #16181c;
+    --paper-raised: #1d2025;
+    --line: #33363c;
+    --line-soft: #26292e;
+    --line-control: #73767c;   /* 3.90:1 on paper, 3.59 on raised, 3.07 on --hl-bg */
+    --accent: #c7c2b8;
+    --accent-press: #ece9e2;
+    --on-accent: #16181c;
+    --accent-bg: #25272c;
+    --hl-bg: #2a2c31;
+    --link: #8fb8e0;        /* 8.55:1 on paper, 7.86 on raised, 6.72 on --hl-bg */
+    --focus: #8ab4f8;
+    --error: #ff8a80;       /* 7.16:1 on raised */
+    --p1: #e2a54b; --p1-on: #1a1d23; --p1-text: #e2a54b;
+    --p2: #61bba6; --p2-on: #1a1d23; --p2-text: #61bba6;
+    --p3: #8d6bc3; --p3-on: #1a1d23; --p3-text: #a88ad6;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+    --ink: #ece9e2;
+    --ink-soft: #c7c2b8;
+    --ink-faint: #9d9991;   /* 6.26:1 on paper, 5.76 on raised, 4.92 on --hl-bg */
+    --paper: #16181c;
+    --paper-raised: #1d2025;
+    --line: #33363c;
+    --line-soft: #26292e;
+    --line-control: #73767c;   /* 3.90:1 on paper, 3.59 on raised, 3.07 on --hl-bg */
+    --accent: #c7c2b8;
+    --accent-press: #ece9e2;
+    --on-accent: #16181c;
+    --accent-bg: #25272c;
+    --hl-bg: #2a2c31;
+    --link: #8fb8e0;        /* 8.55:1 on paper, 7.86 on raised, 6.72 on --hl-bg */
+    --focus: #8ab4f8;
+    --error: #ff8a80;       /* 7.16:1 on raised */
+    --p1: #e2a54b; --p1-on: #1a1d23; --p1-text: #e2a54b;
+    --p2: #61bba6; --p2-on: #1a1d23; --p2-text: #61bba6;
+    --p3: #8d6bc3; --p3-on: #1a1d23; --p3-text: #a88ad6;
+    color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+/* Every jump to an anchor, and every element scrolled into view by keyboard focus, lands
+   below the sticky header: nav.js measures the header into --header-h (site review 3).
+   Anchor targets carry no scroll-margin of their own, which would add to this. */
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h, 4.5rem) + 1rem); }
+/* Under reduced motion a jump is a jump, and nothing fades or slides. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition: none !important; }
+}
+
+/* A column, so the footer sits at the bottom of a short page (site review 2.3). */
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.55;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+body > main { flex: 1 0 auto; }
+
+a { color: var(--link); }
+a:hover { color: var(--ink); }
+
+/* One keyboard focus ring for the whole site, in its own color (site review 1.18). */
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+/* The skip link's target and the heading focused after unlock take focus from script
+   only (tabindex="-1"); they are not controls, so they draw no ring. */
+main[tabindex="-1"]:focus, h1[tabindex="-1"]:focus { outline: none; }
+
+img, svg { max-width: 100%; }
+
+/* ---------- Site chrome ---------- */
+
+.site-header {
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+}
+
+/* Two rows on a wide screen: the site title with the theme switch, then the tabs. The tabs
+   never fit beside the title inside --max-wide. Under 60rem the tabs fold behind a Menu
+   button (site review 2.1), so a phone's header is the title row alone. */
+.site-header-inner {
+  max-width: var(--max-wide);
+  margin: 0 auto;
+  padding: 0.7rem var(--gutter) 0.45rem;
+  position: relative;
+}
+.site-header-bar { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.site-header-tools { display: flex; align-items: center; gap: 0.5rem; flex: none; }
+.theme-toggle, .nav-toggle {
+  font: inherit;
+  color: var(--ink-soft);
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  min-width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+.theme-toggle:hover, .nav-toggle:hover { color: var(--ink); border-color: var(--ink-faint); }
+.theme-toggle svg, .nav-toggle svg { flex: none; }
+/* The switch shows the theme it turns on: a moon in the light theme, a sun in the dark. */
+.theme-toggle .icon-sun, .theme-toggle[aria-pressed="true"] .icon-moon { display: none; }
+.theme-toggle[aria-pressed="true"] .icon-sun { display: block; }
+.nav-toggle { display: none; padding: 0 0.75rem; font-size: 0.9rem; font-weight: 600; color: var(--ink); }
+.nav-toggle[aria-expanded="true"] { background: var(--accent-bg); }
+.nav-toggle .icon-close, .nav-toggle[aria-expanded="true"] .icon-menu { display: none; }
+.nav-toggle[aria-expanded="true"] .icon-close { display: block; }
+
+.site-title {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-nav {
+  display: flex;
+  gap: 0.2rem 1rem;     /* one row at desktop widths with eight tabs (2026-10-01) */
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+}
+
+.site-nav a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 0.3rem 0;
+  border-bottom: 2px solid transparent;
+}
+
+.site-nav a:hover,
+.site-nav a[aria-current="page"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+/* Dropdown menu in the nav (D1580). Hover opens it only where the device has
+   hover; tap and keyboard go through the button, which toggles .nav-menu-open. */
+.nav-menu { position: relative; }
+.nav-menu-button {
+  font: inherit;
+  color: var(--ink-soft);
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 0.3rem 0;
+  cursor: pointer;
+}
+/* A drawn chevron, not the ▾ glyph, which read as a speck (author, 2026-10-01); it flips open. */
+.nav-caret { margin-left: 0.25rem; vertical-align: -0.15em; transition: transform 0.15s; }
+.nav-menu-open .nav-caret { transform: rotate(180deg); }
+.nav-menu-active .nav-menu-button,
+.nav-menu-button:hover { color: var(--ink); border-bottom-color: var(--accent); }
+.nav-menu-list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 50;
+  min-width: 15rem;
+  margin: 0;
+  padding: 0.5rem 0;
+  list-style: none;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+.nav-menu-open .nav-menu-list { display: block; }
+@media (hover: hover) { .nav-menu:hover .nav-menu-list { display: block; } }
+.site-nav .nav-menu-list a {
+  display: block;
+  padding: 0.45rem 1rem;
+  border-bottom: 0;
+  white-space: nowrap;
+}
+.site-nav .nav-menu-list a:hover,
+.site-nav .nav-menu-list a[aria-current="page"] { background: var(--accent-bg); color: var(--ink); }
+/* Search and Shuffle are icons, kept side by side; each is a 36 px target with a mouse
+   and 44 px in the phone menu. */
+.site-nav a.nav-icon-link { min-width: 36px; min-height: 36px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+.site-nav a.nav-icon-link + a.nav-icon-link { margin-left: -0.5rem; }
+
+/* The phone menu (site review 2.1): the tabs drop down under the title row as one column,
+   each row a 44 px target, the How menu opening in place, Search and Shuffle side by side.
+   nav.js opens it with .nav-open on the header and closes it on Escape, an outside click,
+   a link followed, or focus leaving it. */
+@media (max-width: 60rem) {
+  .site-header-inner { padding-top: 0.6rem; padding-bottom: 0.6rem; position: static; }
+  .nav-toggle { display: inline-flex; min-width: 44px; height: 44px; }
+  .theme-toggle { min-width: 44px; height: 44px; }
+  .site-nav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0.4rem var(--gutter) 1rem;
+    gap: 0;
+    font-size: 1rem;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+    max-height: calc(100svh - var(--header-h, 4.5rem));
+    overflow-y: auto;
+  }
+  .nav-open .site-nav { display: flex; }
+  .site-nav > a, .site-nav > .nav-menu { flex: 0 0 100%; }
+  .site-nav > a, .site-nav .nav-menu-button {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 44px;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--line-soft);
+    text-align: left;
+  }
+  .site-nav > a.nav-icon-link { flex: 0 0 44px; width: 44px; min-height: 44px; justify-content: center; border-bottom: 0; margin: 0.2rem 0.5rem 0.2rem 0; }
+  .site-nav > a.nav-icon-link + a.nav-icon-link { margin-left: 0; }
+  .site-nav > a[aria-current="page"], .nav-menu-active .nav-menu-button { font-weight: 600; border-bottom-color: var(--line-soft); box-shadow: inset 3px 0 0 var(--accent); padding-left: 0.7rem; }
+  .site-nav > a.nav-icon-link[aria-current="page"] { padding-left: 0; box-shadow: inset 0 -2px 0 var(--accent); }
+  .site-nav > a:hover, .site-nav .nav-menu-button:hover { border-bottom-color: var(--line-soft); }
+  .nav-menu-button .nav-caret { margin-left: auto; }
+  .site-nav .nav-menu-list { position: static; min-width: 0; box-shadow: none; border: 0; border-radius: 0; background: none; padding: 0 0 0.4rem 1rem; }
+  .site-nav .nav-menu:not(.nav-menu-open) .nav-menu-list { display: none; }
+  .site-nav .nav-menu-list a { white-space: normal; min-height: 44px; display: flex; align-items: center; padding: 0.4rem 0.7rem; }
+}
+/* Under 25rem the title row cannot hold the word: the Menu button keeps its icon, and the
+   word stays for screen readers. Under 21rem the title's mark shrinks too. */
+@media (max-width: 25rem) {
+  .nav-toggle { padding: 0; }
+  .nav-toggle-word { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+  .site-header-tools { gap: 0.4rem; }
+}
+@media (max-width: 21rem) {
+  .site-header-inner { padding-left: 1rem; padding-right: 1rem; }
+  .site-header-bar { gap: 0.5rem; }
+  .site-mark { width: 36px; height: 36px; }
+  .site-header .site-title { gap: 0.45rem; }
+  .site-title .site-title-main { font-size: 0.9rem; }
+}
+.page-draft-note {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  color: var(--accent);
+  background: var(--hl-bg);
+  border-radius: var(--radius);
+  padding: 0.5rem 0.8rem;
+}
+
+/* The gutter sits inside the --max-wide box, as in the header and .wrap, so the footer's
+   text starts where the content's does (site review 1.34). */
+.site-footer {
+  border-top: 1px solid var(--line);
+  margin-top: 4rem;
+  padding: 2rem 0 3rem;
+  color: var(--ink-faint);
+  font-size: 0.85rem;
+}
+
+.site-footer-inner {
+  max-width: var(--max-wide);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem 2rem;
+  flex-wrap: wrap;
+}
+.site-footer p { margin: 0 0 0.3rem; }
+.site-footer-links { list-style: none; margin: 0; padding: 0; display: flex; gap: 0.4rem 1.2rem; flex-wrap: wrap; }
+.site-footer-links a { color: var(--ink-soft); }
+.site-footer-links a:hover { color: var(--ink); }
+
+/* ---------- Layout ---------- */
+
+.wrap { max-width: var(--max-wide); margin: 0 auto; padding: 0 var(--gutter); }
+@media (max-width: 34rem) { :root { --gutter: 1.5rem; } }
+.measure { max-width: var(--max-measure); }
+
+/* ---------- Homepage: the persuasive register ---------- */
+
+.hero {
+  padding: 5rem 0 3.5rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.hero-eyebrow {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.hero-trade {
+  font-family: var(--display);
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+  line-height: 1.3;
+  max-width: 60rem;   /* the title fits one line at full size (author, 2026-10-01) */
+  margin: 0 0 1.5rem;
+}
+
+.hero-sub,
+.hero-vision p {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  max-width: var(--max-measure);
+}
+.hero-vision > p:first-child { font-size: 1.2rem; color: var(--ink); }
+.hero-vision h2 {
+  font-family: var(--display);
+  font-size: 1.45rem;
+  margin: 2.2rem 0 0.6rem;
+  max-width: var(--max-measure);
+}
+.hero-vision ul { max-width: var(--max-measure); color: var(--ink-soft); }
+/* D1667: the three promises under the title, each linking to its section. The
+   scroll margin keeps a jumped-to heading clear of the sticky site header. */
+.promise-list { list-style: none; margin: -0.5rem 0 1.8rem; padding: 0; max-width: 46rem; }
+.promise-list li { margin: 0.35rem 0; }
+.promise-list a { font-family: var(--display); font-size: 1.15rem; color: var(--ink); text-decoration: none; }
+.promise-list a:hover, .promise-list a:focus-visible { text-decoration: underline; }
+.promise-label { font-weight: 700; }
+/* Author, 2026-09-30: each row opens with the promise's symbol, and the letter
+   chip replaces the first letter of the promise's word. */
+.promise-list li { margin: 0.6rem 0; }
+.promise-list a { display: flex; align-items: center; gap: 1rem; }
+.promise-list-art { flex: none; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+.cta-row {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+}
+
+.btn {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 0.7rem 1.3rem;
+  border-radius: var(--radius);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-primary:hover { background: var(--accent-press); color: var(--on-accent); }
+/* The next-tab button at the bottom of each tab page (nav.js). */
+.next-tab { padding-top: 1rem; padding-bottom: 3rem; display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+.btn-next { font-size: 1.05rem; padding: 0.85rem 1.5rem; }
+.btn-arrow { display: inline-block; margin-left: 0.35rem; transition: transform 0.15s ease; }
+.btn-next:hover .btn-arrow, .btn-next:focus .btn-arrow { transform: translateX(4px); }
+.track-icon { display: inline-block; vertical-align: -0.12em; flex: none; }
+.track-num { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; color: var(--ink-faint); margin-right: 0.6rem; font-variant-numeric: tabular-nums; }
+.track-link { display: inline-flex; align-items: center; gap: 0.5rem; }
+.track-link-next { text-align: right; }
+.track-label { display: block; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.nav-icon { display: inline-flex; align-items: center; }
+.btn-secondary { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn-secondary:hover { border-color: var(--ink-soft); color: var(--ink); }
+
+.section { padding: 3.5rem 0; }
+.section + .section { border-top: 1px solid var(--line-soft); }
+
+.section-title {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  margin: 0 0 1.5rem;
+}
+
+.problem-block { max-width: var(--max-measure); margin-bottom: 2.5rem; }
+.problem-block:last-child { margin-bottom: 0; }
+.problem-block h3 { font-size: 1.1rem; margin-bottom: 0.6rem; }
+.problem-block p { color: var(--ink-soft); }
+
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1.5rem;
+}
+
+.pillar-card {
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.4rem;
+}
+
+.pillar-card h4 {
+  margin: 0 0 0.5rem;
+  font-size: 0.98rem;
+}
+
+.pillar-card p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.bill-cards {
+  display: grid;
+  gap: 1.1rem;
+}
+
+.bill-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--line);
+  background: var(--paper-raised);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.6rem;
+}
+
+.bill-card:hover { border-color: var(--accent); }
+
+.bill-card-num {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+/* The card title is h2, h3 or h4 by where the card sits (billCard's level); one size. */
+.bill-card h4, .bill-card .bill-card-title {
+  font-family: var(--display);
+  font-size: 1.15rem;
+  margin: 0 0 0.4rem;
+}
+
+.bill-card p { margin: 0; color: var(--ink-soft); font-size: 0.92rem; }
+
+/* ---------- Law pages: the institutional register ---------- */
+
+/* Top and bottom only: the header shares its element with .wrap, and a padding
+   shorthand here erased the wrap's side gutter, so the title sat left of the page.
+   The rule under it is drawn inside the gutters so it starts where the text does. */
+.law-header {
+  padding-top: 2.5rem;
+  padding-bottom: 1.9rem;
+  background: linear-gradient(var(--line), var(--line)) no-repeat left var(--gutter) bottom / calc(100% - 2 * var(--gutter)) 1px;
+}
+
+.law-title {
+  font-family: var(--display);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  margin: 0 0 0.6rem;
+}
+
+.law-tagline { color: var(--ink-soft); max-width: var(--max-measure); }
+/* The Policy Playlists tab's one line, at subheading size in place of a heading (author, 2026-10-01). */
+.law-tagline.topic-lead { font-family: var(--display); font-size: clamp(1.25rem, 2vw, 1.45rem); font-weight: 600; line-height: 1.35; color: var(--ink); max-width: 46rem; }
+
+.tab-row {
+  display: flex;
+  gap: 0.4rem;
+  margin: 1.5rem 0 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.tab-btn {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: none;
+  border: none;
+  padding: 0.7rem 0.9rem;
+  color: var(--ink-faint);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tab-btn:hover { color: var(--ink); }
+.tab-btn[aria-selected="true"] {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+.tab-panel { padding: 2.5rem 0; }
+.tab-panel[hidden] { display: none; }
+
+.law-summary {
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+  max-width: var(--max-measure);
+}
+
+.group-lead {
+  font-weight: 600;
+  margin: 2.2rem 0 0.8rem;
+  max-width: var(--max-measure);
+}
+
+.group-lead:first-child { margin-top: 0; }
+
+.bullet-list { list-style: none; margin: 0; padding: 0; max-width: var(--max-measure); }
+
+.bullet-item {
+  border-bottom: 1px solid var(--line-soft);
+  padding: 0.7rem 0;
+}
+
+.bullet-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  cursor: pointer;
+}
+
+.bullet-row::before {
+  content: "—";
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+
+.bullet-text { flex: 1; }
+
+.bullet-reveal-btn {
+  flex-shrink: 0;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border: none;
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bullet-reveal-btn:hover { background: var(--accent); color: var(--on-accent); }
+.bullet-reveal-btn[aria-expanded="true"] { background: var(--accent); color: var(--on-accent); }
+
+.bullet-detail {
+  margin: 0.7rem 0 0.2rem 1.4rem;
+  padding: 1rem 1.2rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  font-family: var(--display);
+  font-size: 0.95rem;
+}
+
+.bullet-detail[hidden] { display: none; }
+
+.bullet-detail-label {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+  margin-bottom: 0.5rem;
+}
+
+.bullet-detail-footer {
+  margin-top: 0.8rem;
+  font-family: var(--sans);
+  font-size: 0.82rem;
+}
+
+.bullet-detail-footer a { margin-right: 1rem; }
+
+/* Full statutory text */
+
+.statute {
+  font-family: var(--display);
+  max-width: var(--max-measure);
+}
+
+.statute-part {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  margin: 2.5rem 0 0.3rem;
+}
+
+.statute-section {
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.statute-section.is-highlighted {
+  background: var(--hl-bg);
+  border-radius: var(--radius);
+  padding: 1.2rem 1.2rem;
+  margin: 0 -1.2rem;
+}
+
+.statute-heading {
+  font-size: 1.1rem;
+  margin: 0 0 0.7rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.why-link {
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  background: var(--accent-bg);
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.why-link:hover { background: var(--accent); color: var(--on-accent); }
+
+.statute-body p { margin: 0 0 0.9rem; }
+.statute-body strong { font-weight: 700; }
+
+/* ---------- Notes page ---------- */
+
+.notes-layout {
+  display: grid;
+  grid-template-columns: 15rem 1fr;
+  gap: 2.5rem;
+  align-items: start;
+  padding: 2.5rem 0;
+}
+
+.notes-toc {
+  position: sticky;
+  top: 4.5rem;
+  max-height: calc(100vh - 6rem);
+  overflow-y: auto;
+  font-size: 0.85rem;
+}
+
+.notes-toc-part { font-weight: 700; margin: 1.1rem 0 0.3rem; color: var(--ink); }
+.notes-toc-part:first-child { margin-top: 0; }
+.notes-toc a {
+  display: block;
+  color: var(--ink-soft);
+  text-decoration: none;
+  padding: 0.15rem 0;
+}
+.notes-toc a:hover { color: var(--accent); }
+
+.notes-content .statute-section { font-family: var(--display); }
+.notes-content .statute-heading { font-size: 1.15rem; }
+
+@media (max-width: 55rem) {
+  .notes-layout { grid-template-columns: 1fr; }
+  .notes-toc { position: static; max-height: none; }
+}
+
+/* ---------- Methodology / simple prose pages ---------- */
+
+.prose { max-width: var(--max-measure); padding: 2.5rem 0; }
+.prose h2 { font-family: var(--display); font-size: 1.4rem; }
+.prose p { color: var(--ink-soft); }
+
+/* ---------- Misc ---------- */
+
+.pill {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-family: var(--mono);
+  background: var(--accent-bg);
+  color: var(--accent);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  margin-right: 0.4rem;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--accent);
+  color: var(--on-accent);
+  padding: 0.6rem 1rem;
+  z-index: 100;
+}
+.skip-link:focus { left: 1rem; top: 1rem; }
+
+/* ==========================================================================
+   1.0 additions, 2026-09-08: doors, topic grid, status pills, the zoom,
+   breadcrumbs, search. Same two registers and the same tokens as above.
+   ========================================================================== */
+
+.crumbs { font-size: 0.85rem; color: var(--ink-faint); margin-bottom: 0.6rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.crumbs a { color: var(--ink-soft); text-decoration: none; }
+.crumbs a:hover { color: var(--accent); }
+
+.door-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 1.2rem; }
+.door {
+  display: block; padding: 1.4rem 1.5rem; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--paper-raised); color: var(--ink); text-decoration: none;
+}
+.door:hover { border-color: var(--accent); color: var(--ink); }
+.door-time { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+.door h2, .door h3 { margin: 0 0 0.4rem; font-size: 1.15rem; }
+.door p { margin: 0; color: var(--ink-soft); font-size: 0.93rem; }
+
+.topic-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1.2rem; }
+.topic-card {
+  display: block; padding: 1.3rem 1.4rem; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--paper-raised); color: var(--ink); text-decoration: none; position: relative;
+}
+.topic-card:hover { border-color: var(--accent); color: var(--ink); }
+.topic-num { font-family: var(--mono); font-size: 0.75rem; color: var(--ink-faint); }
+.topic-card h3 { font-family: var(--display); font-size: 1.2rem; margin: 0.3rem 0 0.5rem; }
+.topic-card p { margin: 0 0 0.8rem; color: var(--ink-soft); font-size: 0.92rem; }
+.topic-meta { font-size: 0.8rem; color: var(--ink-faint); }
+.topic-counts { font-size: 0.85rem; color: var(--ink-faint); margin: 1.9rem 0 1.1rem; }
+.topic-body { padding: 0.4rem 0 3.5rem; }
+.topic-block { padding: 1.8rem 0; border-top: 1px solid var(--line-soft); }
+.topic-block-title { font-family: var(--display); font-size: 1.35rem; margin: 0 0 0.4rem; }
+.topic-block-title a { color: var(--ink); text-decoration: none; }
+.topic-block-title a:hover { color: var(--accent); }
+.topic-block-explainer { color: var(--ink-soft); max-width: var(--max-measure); margin: 0 0 1rem; }
+.one-line-list { list-style: none; margin: 0; padding: 0; }
+/* Child combinators: the rows' own promise lists (.promise-hows li) are not rows. */
+.one-line-list > li { padding: 0.5rem 0; border-top: 1px solid var(--line-soft); display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.8rem; align-items: baseline; }
+.one-line-list > li > .one-line { grid-column: 2; color: var(--ink-soft); font-size: 0.93rem; }
+/* A linked name is underlined, so a bill with a page reads differently from one without. */
+.one-line-list .row-name a { color: var(--ink); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; text-decoration-color: var(--ink-faint); }
+.one-line-list .row-name a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+
+.pill-status { display: inline-block; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 999px; border: 1px solid var(--line); color: var(--ink-soft); white-space: nowrap; }
+.pill-canonical { background: var(--accent-bg); border-color: transparent; color: var(--accent); }
+.pill-planned { background: var(--hl-bg); border-color: transparent; color: var(--ink-soft); }
+.pill-proposed { background: transparent; }
+/* The two amendments and the Senate rule, which are listed but not counted among the 100. */
+.pill-kind { display: inline-block; font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.15rem 0.5rem; margin-left: 0.4rem; border-radius: 999px; border: 1px dashed var(--line); color: var(--ink-soft); white-space: nowrap; }
+.bill-card-top { display: flex; align-items: center; margin-bottom: 0.6rem; }
+.bill-card-link { color: var(--ink); text-decoration: none; }
+.bill-card-flat { opacity: 0.85; }
+.bill-card-cta { display: block; margin-top: 0.8rem; font-size: 0.85rem; color: var(--accent); }
+.bill-card-cta.muted { color: var(--ink-faint); }
+.muted { color: var(--ink-faint); }
+
+.prev-next { display: flex; justify-content: space-between; gap: 1rem; padding: 2rem 0 3rem; border-top: 1px solid var(--line-soft); font-size: 0.92rem; }
+.prev-next a { text-decoration: none; }
+/* On a phone the links stack in one column instead of squeezing side by side. */
+@media (max-width: 40rem) { .prev-next { flex-direction: column; align-items: flex-start; gap: 0.8rem; } }
+
+/* The zoom */
+.zoom-hint { font-size: 0.85rem; color: var(--ink-faint); margin: 0 0 1.2rem; }
+.zoom-part { margin-top: 1.8rem; }
+.zoom-section { border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper-raised); margin: 0 0 0.7rem; max-width: 52rem; }
+.zoom-section.is-open { border-color: var(--accent); }
+.zoom-section.is-highlighted { border-color: var(--accent); box-shadow: 0 0 0 3px var(--hl-bg); }
+.zoom-head { display: grid; grid-template-columns: 1fr auto; gap: 0.2rem 1rem; width: 100%; text-align: left; padding: 0.9rem 1.1rem; background: none; border: 0; color: var(--ink); font: inherit; cursor: pointer; }
+.zoom-head:hover .zoom-heading { color: var(--accent); }
+.zoom-heading { font-family: var(--display); font-weight: 700; font-size: 1.02rem; }
+.zoom-excerpt { grid-column: 1; color: var(--ink-soft); font-size: 0.9rem; }
+.zoom-meta { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-family: var(--mono); font-size: 0.72rem; color: var(--ink-faint); display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
+.zoom-chevron { display: inline-block; transition: transform 0.15s; font-size: 1.1rem; color: var(--ink-faint); }
+[aria-expanded="true"] > .zoom-chevron, [aria-expanded="true"] .zoom-meta .zoom-chevron { transform: rotate(90deg); }
+.zoom-body { padding: 0 1.1rem 1rem; border-top: 1px solid var(--line-soft); }
+.zoom-level-label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 1rem 0 0.5rem; }
+.zoom-points { list-style: none; margin: 0; padding: 0; }
+.zoom-point { border-top: 1px solid var(--line-soft); }
+.zoom-point-head { display: flex; gap: 0.8rem; align-items: flex-start; width: 100%; text-align: left; padding: 0.65rem 0; background: none; border: 0; color: var(--ink); font: inherit; cursor: pointer; }
+.zoom-point-head::before { content: ""; flex: 0 0 0.45rem; height: 0.45rem; margin-top: 0.5rem; border-radius: 50%; background: var(--accent); }
+.zoom-point-text { flex: 1; }
+.zoom-point-head:hover .zoom-point-text { color: var(--accent); }
+.zoom-point-body { padding: 0 0 0.8rem 1.25rem; }
+.zoom-point-body .statute-body { font-family: var(--display); font-size: 0.95rem; background: var(--accent-bg); padding: 0.8rem 1rem; border-radius: var(--radius); margin-bottom: 0.6rem; }
+.zoom-body > .statute-body { font-family: var(--display); font-size: 0.97rem; }
+.why-btn { font: inherit; font-size: 0.8rem; padding: 0.15rem 0.6rem; border: 1px solid var(--accent); border-radius: 999px; background: transparent; color: var(--accent); cursor: pointer; margin-right: 0.6rem; }
+.why-btn:hover, .why-btn.is-open { background: var(--accent); color: var(--on-accent); }
+.why-panel { margin-top: 0.6rem; }
+.why-inline { font-family: var(--display); font-size: 0.95rem; border-left: 3px solid var(--accent); padding: 0.4rem 0 0.4rem 1rem; color: var(--ink-soft); }
+.why-inline-label { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+.zoom-boiler { margin-top: 1.5rem; max-width: 52rem; }
+.zoom-boiler summary { cursor: pointer; color: var(--ink-faint); font-size: 0.9rem; padding: 0.6rem 0; }
+.zoom-boiler .zoom-section { margin-top: 0.7rem; }
+.zoom-loose { padding: 0.2rem 1.1rem 1rem; }
+
+/* Search */
+.search-form { display: flex; gap: 0.6rem; max-width: 40rem; margin: 1rem 0 0; }
+.search-box { flex: 1; min-width: 0; font: inherit; padding: 0.6rem 0.8rem; border: 1px solid var(--line-control); border-radius: var(--radius); background: var(--paper-raised); color: var(--ink); }
+.search-results { padding: 1.5rem 0 3rem; max-width: 52rem; }
+.search-count, .search-empty { color: var(--ink-faint); font-size: 0.9rem; }
+.result { display: block; padding: 0.9rem 0; border-top: 1px solid var(--line-soft); color: var(--ink); text-decoration: none; }
+.result:hover .result-title { color: var(--accent); }
+.result-kind { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.result-title { font-family: var(--display); font-weight: 700; margin: 0.15rem 0; }
+.result-text { color: var(--ink-soft); font-size: 0.9rem; }
+mark { background: var(--hl-bg); color: inherit; padding: 0 0.1em; }
+
+/* About page prose */
+.about-prose h1 { font-family: var(--display); font-size: 2rem; margin-bottom: 1.5rem; }
+.about-prose h2 { margin-top: 2.4rem; }
+.about-prose p strong:first-child { color: var(--ink); }
+.about-prose blockquote { margin: 1rem 0; padding-left: 1rem; border-left: 3px solid var(--line); color: var(--ink-soft); }
+
+@media (max-width: 40rem) {
+  .zoom-head { grid-template-columns: 1fr; }
+  .zoom-meta { grid-column: 1; grid-row: auto; }
+}
+
+/* The password gate */
+body.locked { overflow: hidden; }
+.gate { position: fixed; inset: 0; z-index: 1000; background: var(--paper); display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
+.gate-card { width: 100%; max-width: 22rem; background: var(--paper-raised); border: 1px solid var(--line); border-radius: var(--radius); padding: 1.8rem 1.6rem; display: flex; flex-direction: column; gap: 0.6rem; }
+.gate-main { width: 100%; max-width: 22rem; }
+.gate-title { font-family: var(--display); font-size: 1.4rem; font-weight: 700; margin: 0; line-height: 1.3; }
+.gate-line { margin: 0 0 0.6rem; color: var(--ink-soft); font-size: 0.93rem; }
+.gate-label { font-size: 0.8rem; color: var(--ink-faint); }
+.gate-input { font: inherit; padding: 0.6rem 0.7rem; border: 1px solid var(--line-control); border-radius: var(--radius); background: var(--paper); color: var(--ink); }
+.gate-remember { font-size: 0.85rem; color: var(--ink-soft); display: flex; gap: 0.4rem; align-items: center; }
+.gate-btn { margin-top: 0.4rem; cursor: pointer; }
+.gate-btn:disabled { opacity: 0.7; cursor: progress; }
+.gate-input[aria-invalid="true"] { border-color: var(--error); }
+.gate-error { margin: 0.4rem 0 0; color: var(--error); font-size: 0.88rem; }
+
+/* The inauguration countdown on the Why and How page */
+.countdown { white-space: nowrap; }
+.countdown-num {
+  font-family: var(--display);
+  font-size: 1.9em;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+/* The two-part wordmark: the project name, with the campaign line beside it.
+   The line drops on narrow screens so the header stays on one row. */
+.site-title { display: inline-flex; align-items: center; gap: 0.6rem; }
+/* The round wordmarks (D982, W3943): Project ’27 to ’29 leads in the header and on the
+   password screen; the 100 Bills mark heads the home page and the 100 Bills tab. The site
+   copies are cut to the disc by scripts/round_wordmarks.py --site, so no tile shows. */
+.site-mark { display: block; flex: none; }
+.gate-mark { align-self: center; margin-bottom: 0.4rem; }
+.gate-title, .gate-subtitle, .gate-line { text-align: center; }
+/* The home page's opening screen (author, 2026-10-01): the full Project mark, centered,
+   filling the screen under the sticky header, whose height home-intro.js measures. */
+.home-intro {
+  min-height: calc(100svh - var(--header-h, 8rem));
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1.2rem; padding: 1.5rem var(--gutter); box-sizing: border-box;
+  border-bottom: 1px solid var(--line);
+}
+/* The mark sits in a navy square with a little space around the disc, so it reads as an
+   album case (author, 2026-10-01). The navy is the disc's, in both modes. */
+.home-intro-link { display: block; padding: 10px; border: 3px solid var(--cd-navy); }
+.home-intro-mark {
+  display: block; height: auto;
+  width: min(480px, calc(100vw - 2 * var(--gutter) - 26px), calc(100svh - var(--header-h, 8rem) - 7rem - 26px));
+}
+.home-intro-cue { color: var(--ink-faint); line-height: 0; }
+.home-intro-cue:hover { color: var(--ink); }
+@media (prefers-reduced-motion: no-preference) {
+  .home-intro-cue svg { animation: intro-cue 2.4s ease-in-out infinite; }
+  @keyframes intro-cue { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(6px); } }
+}
+.site-title-main { font-family: var(--display); font-weight: 600; font-size: 1.05rem; letter-spacing: 0.01em; white-space: nowrap; }
+/* "100 Bills in 100 Days" left the header (site review 2.17): it is a tab's name. The
+   password screen keeps it under the title. */
+.gate-subtitle { font-size: 0.92rem; color: var(--ink-faint); margin-top: -0.3rem; }
+
+/* The 100 Bills tab (D1670-D1674). The Policy Playlists tab shows its playlists as CDs
+   (author, 2026-10-01; styles at the end of this file). */
+.promise-cards { margin-top: 0.4rem; }
+.shuffle { margin: 1.6rem 0 0.4rem; max-width: 48rem; }
+.shuffle-button { display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer; }
+.shuffle-icon { flex: none; }
+.shuffle-slot:empty { display: none; }
+.shuffle-slot { margin: 1rem 0 2rem; padding-bottom: 1.6rem; border-bottom: 1px solid var(--line); }
+/* The Shuffle tab: no header band above, no rule below (author, 2026-10-01). */
+.law-header.law-header-bare { padding: 0; background: none; }
+.shuffle-page .shuffle-slot { border-bottom: 0; }
+.now-playing { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.5rem; }
+.theme-index-more { margin-top: 1.9rem; font-size: 0.92rem; }
+
+.family-jumps { display: flex; flex-wrap: wrap; gap: 0.4rem 0.5rem; margin: 1.4rem 0 0.4rem; }
+.family-jumps a { font-size: 0.83rem; padding: 0.2rem 0.65rem; border: 1px solid var(--line-control); border-radius: 999px; color: var(--ink-soft); text-decoration: none; }
+.family-jumps a:hover { border-color: var(--accent); color: var(--accent); }
+.promise-group { padding-top: 1.6rem; }
+.promise-group-title { font-family: var(--display); font-size: 1.3rem; margin: 0 0 0.8rem; }
+.promise-group-title a { color: var(--ink); text-decoration: none; }
+.promise-group-title a:hover { color: var(--accent); }
+
+.promise-how { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
+.promise-hows { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.45rem; }
+.promise-hows li { color: var(--ink-soft); font-size: 0.93rem; }
+.promise-mark { display: inline; font-weight: 700; margin-right: 0.2rem; white-space: nowrap; }
+.promise-mark .mark { margin: 0 0.3rem 0 0; vertical-align: -0.45em; }
+.law-promises .promise-hows li { font-size: 1rem; }
+.one-line-list li .one-line .promise-hows { margin-top: 0.15rem; }
+
+
+/* ---------- Progress page (W2144) ----------
+   One hue for every meter: it measures one quantity. The percent is always
+   printed beside the bar and each stage carries a symbol and a word, so no
+   state rests on color alone. Fill widths are set by progress-page.js
+   through the CSSOM, never a style attribute (the published style-src). */
+
+.progress-body { padding: 0.4rem 0 3.5rem; }
+.meter { display: inline-block; position: relative; width: 9rem; height: 0.5rem; border-radius: 999px; background: var(--line-soft); overflow: hidden; vertical-align: middle; }
+.meter-fill { display: block; height: 100%; width: 0; border-radius: 999px; background: var(--accent); }
+.progress-pct { font-family: var(--mono); font-size: 0.8rem; color: var(--ink-soft); min-width: 3ch; text-align: right; }
+
+.progress-summary { margin: 1.9rem 0 1rem; max-width: var(--max-measure); }
+.progress-summary .meter { width: 100%; height: 0.7rem; margin: 0.6rem 0 0.9rem; }
+.progress-hero { display: flex; align-items: baseline; gap: 0.8rem; flex-wrap: wrap; }
+.progress-hero-num { font-family: var(--display); font-size: 2.6rem; font-weight: 600; color: var(--ink); line-height: 1; }
+.progress-hero-label { color: var(--ink-soft); }
+.progress-milestone { color: var(--ink-soft); margin: 0 0 0.6rem; }
+.progress-parked { color: var(--ink-faint); font-size: 0.9rem; padding-left: 1.1rem; margin: 0; }
+
+.progress-family { padding: 1.6rem 0 0.8rem; border-top: 1px solid var(--line-soft); }
+.progress-family-title { font-family: var(--display); font-size: 1.25rem; margin: 0 0 0.6rem; display: grid; grid-template-columns: 1fr auto auto; gap: 0.8rem; align-items: center; }
+.progress-bills { list-style: none; margin: 0; padding: 0; }
+.progress-bill { border-top: 1px solid var(--line-soft); }
+.progress-bill summary { display: grid; grid-template-columns: 1fr 8rem auto auto; gap: 0.8rem; align-items: center; padding: 0.55rem 0; cursor: pointer; list-style: none; }
+.progress-bill summary::-webkit-details-marker { display: none; }
+.progress-bill summary:hover .progress-bill-name { color: var(--accent); }
+.progress-bill-name { font-weight: 600; }
+.progress-bill-phase { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); }
+.progress-detail { padding: 0.2rem 0 1.2rem 1rem; max-width: var(--max-measure); }
+.progress-next { color: var(--ink-soft); margin: 0 0 0.6rem; }
+.stage-section { font-size: 0.85rem; margin: 0.9rem 0 0.3rem; color: var(--ink); }
+.stage-parked { font-family: var(--mono); font-size: 0.65rem; font-weight: 400; color: var(--ink-faint); margin-left: 0.4rem; }
+.stage-list { list-style: none; margin: 0; padding: 0; font-size: 0.88rem; }
+.stage { display: grid; grid-template-columns: 1.3rem 1fr auto; gap: 0.5rem; padding: 0.12rem 0; color: var(--ink-soft); }
+.stage-mark { color: var(--ink-faint); text-align: center; }
+.stage-d .stage-mark { color: var(--accent); }
+.stage-state { font-size: 0.78rem; color: var(--ink-faint); white-space: nowrap; }
+.stage-x, .stage-k { opacity: 0.7; }
+.stage-milestone { margin: 0.4rem 0 0; padding-top: 0.3rem; border-top: 1px dashed var(--line); font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+
+@media (max-width: 40rem) {
+  .progress-bill summary { grid-template-columns: 1fr auto; }
+  .progress-bill summary .meter { grid-column: 1; width: 100%; }
+  .progress-bill-phase { grid-column: 2; grid-row: 1; }
+  .progress-family-title .meter { width: 4.5rem; }
+}
+
+/* Progress page additions (2026-10-01): the intro, the playlist jump links, the
+   open/closed chevron on each bill, and the step explanations. */
+.progress-intro { max-width: var(--max-measure); margin: 1.4rem 0 0; color: var(--ink-soft); }
+.progress-intro p { margin: 0 0 0.5rem; }
+.progress-asof { font-size: 0.85rem; color: var(--ink-faint); }
+.progress-jump ul { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.progress-jump a { display: inline-block; padding: 0.25rem 0.65rem; border: 1px solid var(--line-control); border-radius: 999px; font-size: 0.82rem; color: var(--ink-soft); text-decoration: none; background: var(--paper); }
+.progress-jump a:hover, .progress-jump a:focus-visible { color: var(--ink); border-color: var(--ink-faint); }
+.progress-footnote { font-size: 0.82rem; color: var(--ink-faint); margin: 0.6rem 0 0; }
+.progress-bill summary { grid-template-columns: 1rem 1fr 8rem auto auto; }
+.progress-chevron { color: var(--ink-faint); display: block; }
+.progress-bill details[open] > summary .progress-chevron { transform: rotate(90deg); }
+.progress-bill summary:hover .progress-chevron { color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .progress-chevron { transition: transform 0.15s ease; }
+}
+.stage-label { all: unset; cursor: pointer; color: inherit; text-decoration: underline dotted var(--line); text-underline-offset: 0.2em; }
+.stage-label:hover, .stage-label[aria-expanded="true"] { color: var(--ink); text-decoration-color: var(--ink-faint); }
+.stage-label:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.stage-explain { grid-column: 2 / -1; margin: 0.1rem 0 0.4rem; font-size: 0.82rem; color: var(--ink-soft); }
+.stage-e .stage-mark { color: var(--accent); }
+@media (max-width: 40rem) {
+  .progress-bill summary { grid-template-columns: 1rem 1fr auto; }
+  .progress-chevron { grid-column: 1; grid-row: 1; }
+  .progress-bill-name { grid-column: 2; grid-row: 1; }
+  .progress-bill-phase { grid-column: 3; grid-row: 1; }
+  .progress-bill summary .meter { grid-column: 2; grid-row: 2; width: 100%; }
+  .progress-bill summary .progress-pct { grid-column: 3; grid-row: 2; }
+}
+
+/* ---------- Promise marks and symbols (D1767, D1761-D1764; author, 2026-09-30) ----------
+   Vector marks under 72 px: the wheel (a third per promise) and the letter chip.
+   Symbol images only at 72 px and up. Fills come from these classes, never from
+   style attributes (the published style-src). */
+.mark { display: inline-block; flex: none; overflow: visible; }
+.mk-p1 { fill: var(--p1); } .mk-p2 { fill: var(--p2); } .mk-p3 { fill: var(--p3); }
+/* An unkept promise: its own color, lighter (author, 2026-09-30). */
+.mk-p1.mk-off { fill: color-mix(in srgb, var(--p1) 26%, var(--paper-raised)); }
+.mk-p2.mk-off { fill: color-mix(in srgb, var(--p2) 22%, var(--paper-raised)); }
+.mk-p3.mk-off { fill: color-mix(in srgb, var(--p3) 26%, var(--paper-raised)); }
+.mk-gap { stroke: var(--paper-raised); stroke-width: 5; }
+/* The letters take the font of the text around the mark (author, 2026-09-30),
+   so a chip beside or inside a word matches it. */
+.mk-t { font-family: inherit; font-size: 34px; font-weight: 700; text-anchor: middle; dominant-baseline: central; }
+.mk-chip-t { font-size: 62px; }
+.mk-t1 { fill: var(--p1-on); } .mk-t2 { fill: var(--p2-on); } .mk-t3 { fill: var(--p3-on); }
+.mk-t1.mk-off { fill: color-mix(in srgb, var(--p1-text) 60%, var(--paper-raised)); }
+.mk-t2.mk-off { fill: color-mix(in srgb, var(--p2-text) 55%, var(--paper-raised)); }
+.mk-t3.mk-off { fill: color-mix(in srgb, var(--p3-text) 60%, var(--paper-raised)); }
+.promise-mark-1, .promise-label-1, .promise-card-1 .door-time { color: var(--p1-text); }
+.promise-mark-2, .promise-label-2, .promise-card-2 .door-time { color: var(--p2-text); }
+.promise-mark-3, .promise-label-3, .promise-card-3 .door-time { color: var(--p3-text); }
+/* Each full promise sentence in its promise's color (author, 2026-10-01). */
+.promise-text-1, .hero-vision h2.promise-text-1, .promise-list a .promise-text-1 { color: var(--p1-text); }
+.promise-text-2, .hero-vision h2.promise-text-2, .promise-list a .promise-text-2 { color: var(--p2-text); }
+.promise-text-3, .hero-vision h2.promise-text-3, .promise-list a .promise-text-3 { color: var(--p3-text); }
+.promise-img, .promise-img img { display: block; }
+
+/* Bill cards: the wheel at 40 px at the right of the card's top row (D1761). */
+.bill-card-mark { margin-left: auto; padding-left: 0.8rem; line-height: 0; }
+.bill-card-top { min-height: 40px; }
+
+/* Every-bill page: the wheel at 28 px at the start of each row (D1762). */
+.one-line-list > li { grid-template-columns: 28px auto 1fr; align-items: center; }
+.one-line-list > li > .one-line { grid-column: 2 / -1; }
+.row-mark { line-height: 0; width: 28px; }
+
+/* The four promise cards stack in one column (author, 2026-10-01). */
+.promise-cards { grid-template-columns: 1fr; max-width: 48rem; }
+.promise-cards + .section-title { margin-top: 2.6rem; }
+
+/* The promise cards on the 100 Bills tab: the symbol at 72 px. */
+.promise-card { display: flex; gap: 1.1rem; align-items: center; }
+.promise-card-art { flex: none; }
+.promise-card-text { min-width: 0; }
+.promise-card-1:hover { border-color: var(--p1); }
+.promise-card-2:hover { border-color: var(--p2); }
+.promise-card-3:hover { border-color: var(--p3); }
+
+/* The fourth card's wheel, and the wheel opening the home page's fourth heading
+   (.pa-trigger-all), on hover or keyboard focus only (author, 2026-09-30):
+   it steps through each pair and then all three (AF, AI, FI, AFI), two-thirds of a
+   second each (sped up threefold, author, 2026-09-30), by lightening the third that is left out. The colors are .mk-off's. */
+:is(.promise-card-all, .pa-trigger-all) .mk-p1 { --on: var(--p1); --off: color-mix(in srgb, var(--p1) 26%, var(--paper-raised)); }
+:is(.promise-card-all, .pa-trigger-all) .mk-p2 { --on: var(--p2); --off: color-mix(in srgb, var(--p2) 22%, var(--paper-raised)); }
+:is(.promise-card-all, .pa-trigger-all) .mk-p3 { --on: var(--p3); --off: color-mix(in srgb, var(--p3) 26%, var(--paper-raised)); }
+:is(.promise-card-all, .pa-trigger-all) .mk-t1 { --on: var(--p1-on); --off: color-mix(in srgb, var(--p1-text) 60%, var(--paper-raised)); }
+:is(.promise-card-all, .pa-trigger-all) .mk-t2 { --on: var(--p2-on); --off: color-mix(in srgb, var(--p2-text) 55%, var(--paper-raised)); }
+:is(.promise-card-all, .pa-trigger-all) .mk-t3 { --on: var(--p3-on); --off: color-mix(in srgb, var(--p3-text) 60%, var(--paper-raised)); }
+:is(.promise-card-all, .pa-trigger-all) :is(.mk-p3, .mk-t3) { --wheel: wheel-off-i; }
+:is(.promise-card-all, .pa-trigger-all) :is(.mk-p2, .mk-t2) { --wheel: wheel-off-f; }
+:is(.promise-card-all, .pa-trigger-all) :is(.mk-p1, .mk-t1) { --wheel: wheel-off-a; }
+
+/* The symbols' moving parts (D1853), stacked over a repaired base and clipped to the disc.
+   assets/js/promise-anim.js moves them; with no script the still symbol shows. They move
+   when their .pa-trigger is hovered or focused: a promise card on the 100 Bills tab, a row
+   of the home page's promise list, or a home promise heading (author, 2026-09-30). */
+.promise-anim { position: relative; display: block; clip-path: circle(50%); }
+.promise-anim .pa { display: block; position: absolute; inset: 0; width: 100%; height: 100%; }
+.promise-anim .pa-base { position: relative; }
+.promise-anim img { display: block; }
+.promise-anim-3 :is(.pa-needle, .pa-shadow) { transform-origin: 0 0; }
+.promise-anim .pa-needle-tip, .promise-anim .pa-shadow { visibility: hidden; }
+.promise-anim .pa-shadow img { filter: brightness(0) blur(0.6px); }
+.pa-live path { fill: none; stroke: var(--p3-tint); stroke-linecap: round; }
+.pa-live .pa-tail { stroke-linecap: butt; }   /* the drawn tail ends square */
+/* The envelope (W3816; author, 2026-09-30): the drawn one fades off the table, a larger one
+   fades in whole at 1.55x, the largest that keeps it on the tabletop (D1859), and shrinks
+   about its center into the drawn size. At rest the layer is the drawn envelope over a base
+   with the envelope removed. Scale and center: scripts/promise_anim_layers.py. */
+.promise-anim-1 .pa-envelope { transform-origin: 50.28% 35.25%; }
+/* The hats (W3816; author, 2026-09-30: the top hat tips while the hard hat rises). The
+   still is the end of the act, so the loop starts before it: both hats fade off, the disc
+   holds empty, they fade in with the top hat upright and the hard hat lowered to its level
+   and tilted back 6 degrees less, and hold. The top hat starts to tip first, about the
+   center of its brim, in line with the promise (author, 2026-09-30); the hard hat rises past
+   the half-tipped crown, and the bow finishes beside a hard hat already still, so the two
+   never pass closer than the 8 master px they keep in the still. A rise after the bow runs
+   into the crown.
+   Pivots, angle and drop: scripts/promise_anim_layers.py. */
+.promise-anim-2 .pa-tophat { transform-origin: 21.82% 66.77%; }
+.promise-anim-2 .pa-hardhat { transform-origin: 69.68% 40.16%; }
+
+/* The wheel's motion runs on hover or keyboard focus; on a device with no hover (a phone)
+   it loops on its own (author, 2026-09-30). None of it runs under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  :is(.promise-card-all, .pa-trigger-all):is(:hover, :focus-visible) :is(.mk-p1, .mk-p2, .mk-p3, .mk-t1, .mk-t2, .mk-t3) { animation: var(--wheel) calc(8s / 3) infinite; }
+}
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  :is(.promise-card-all, .pa-trigger-all) :is(.mk-p1, .mk-p2, .mk-p3, .mk-t1, .mk-t2, .mk-t3) { animation: var(--wheel) calc(8s / 3) infinite; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pa-trigger:is(:hover, :focus-visible) .promise-anim-1 .pa-envelope { animation: envelope-shrinks 2.8s infinite; }
+}
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .promise-anim-1 .pa-envelope { animation: envelope-shrinks 2.8s infinite; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pa-trigger:is(:hover, :focus-visible) .promise-anim-2 .pa-tophat { animation: tophat-tips 2.75s infinite; }
+  .pa-trigger:is(:hover, :focus-visible) .promise-anim-2 .pa-hardhat { animation: hardhat-rises 2.75s infinite; }
+}
+@media (hover: none) and (prefers-reduced-motion: no-preference) {
+  .promise-anim-2 .pa-tophat { animation: tophat-tips 2.75s infinite; }
+  .promise-anim-2 .pa-hardhat { animation: hardhat-rises 2.75s infinite; }
+}
+/* Over 2.75 s: both out in 0.15 s; the disc empty 0.4 s; in, at the start pose, 0.15 s;
+   hold 0.4 s; the top hat tips 1.0 s, and 0.25 s after it starts the hard hat rises 0.4 s;
+   the still holds 0.65 s. The pose changes only while the hats are invisible. */
+@keyframes hardhat-rises {
+  0% { opacity: 1; transform: translateY(0) rotate(0deg); animation-timing-function: linear; }
+  5.45% { opacity: 0; transform: translateY(0) rotate(0deg); animation-timing-function: linear; }
+  6% { opacity: 0; transform: translateY(16.22%) rotate(6deg); animation-timing-function: linear; }
+  20% { opacity: 0; transform: translateY(16.22%) rotate(6deg); animation-timing-function: linear; }
+  25.45% { opacity: 1; transform: translateY(16.22%) rotate(6deg); animation-timing-function: linear; }
+  49.09% { opacity: 1; transform: translateY(16.22%) rotate(6deg); animation-timing-function: ease-in-out; }
+  63.64%, 100% { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+@keyframes tophat-tips {
+  0% { opacity: 1; transform: rotate(0deg); animation-timing-function: linear; }
+  5.45% { opacity: 0; transform: rotate(0deg); animation-timing-function: linear; }
+  6% { opacity: 0; transform: rotate(-33.8deg); animation-timing-function: linear; }
+  20% { opacity: 0; transform: rotate(-33.8deg); animation-timing-function: linear; }
+  25.45% { opacity: 1; transform: rotate(-33.8deg); animation-timing-function: linear; }
+  40% { opacity: 1; transform: rotate(-33.8deg); animation-timing-function: ease-in-out; }
+  76.36%, 100% { opacity: 1; transform: rotate(0deg); }
+}
+/* Over 2.8 s (author, 2026-09-30): out in 0.15 s; the table blank 0.45 s; in, large, in
+   0.15 s; holds large 0.4 s; shrinks 1.0 s, decelerating into place; holds small 0.65 s. The
+   scale changes only while it is invisible. */
+@keyframes envelope-shrinks {
+  0% { opacity: 1; transform: scale(1); animation-timing-function: linear; }
+  5.36% { opacity: 0; transform: scale(1); animation-timing-function: linear; }
+  6% { opacity: 0; transform: scale(1.55); animation-timing-function: linear; }
+  21.43% { opacity: 0; transform: scale(1.55); animation-timing-function: linear; }
+  26.79% { opacity: 1; transform: scale(1.55); animation-timing-function: linear; }
+  41.07% { opacity: 1; transform: scale(1.55); animation-timing-function: cubic-bezier(0.3, 0, 0.2, 1); }
+  76.79%, 100% { opacity: 1; transform: scale(1); }
+}
+@keyframes wheel-off-i { 0%, 22% { fill: var(--off); } 25%, 97% { fill: var(--on); } 100% { fill: var(--off); } }
+@keyframes wheel-off-f { 0%, 22% { fill: var(--on); } 25%, 47% { fill: var(--off); } 50%, 100% { fill: var(--on); } }
+@keyframes wheel-off-a { 0%, 47% { fill: var(--on); } 50%, 72% { fill: var(--off); } 75%, 100% { fill: var(--on); } }
+
+/* A promise page: the symbol at 120 px beside the title. */
+.promise-hero { display: grid; grid-template-columns: auto 1fr; column-gap: 1.4rem; align-items: center; }
+.promise-hero .crumbs, .promise-hero .law-tagline { grid-column: 1 / -1; }
+.promise-hero .law-title { margin: 0; }
+.promise-hero .law-tagline { margin-top: 1.1rem; }
+@media (max-width: 34rem) {
+  .promise-hero-art img { width: 88px; height: 88px; }
+}
+
+/* The home page: each promise heading opens with its symbol at 88 px. */
+.hero-vision h2.promise-head { display: flex; align-items: center; gap: 1.1rem; max-width: 46rem; margin-top: 2.8rem; }
+.promise-head-art, .promise-head-wheel { flex: none; line-height: 0; }
+/* The wheel sits between the symbol and the words (author, 2026-10-01). */
+.promise-head-wheel { margin-left: -0.3rem; }
+@media (max-width: 34rem) {
+  .hero-vision h2.promise-head { gap: 0.8rem; }
+  .promise-head-art img { width: 72px; height: 72px; }
+  /* On a phone the wheel beside the symbol left the words five lines in a narrow column
+     (site review 1.19); the symbol alone names the promise there. */
+  .promise-head-wheel { display: none; }
+}
+
+/* The Policy Playlists tab's CDs (author, 2026-10-01): four across, two on a tablet and on
+   a phone. One SVG per CD: the disc with its hole cut out, so the page shows through, the
+   clear hub around the hole, the ring, and the name, set by topic-page.js. */
+.cd-shelf {
+  list-style: none; margin: 0.4rem 0 2rem; padding: 0;
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1.6rem;
+}
+@media (max-width: 52rem) { .cd-shelf { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+/* Two to a row on a phone too (site review 2.22), with a tighter gap. */
+@media (max-width: 34rem) { .cd-shelf { gap: 1.1rem 0.9rem; } }
+.cd { display: block; border-radius: 50%; text-decoration: none; }
+.cd-art { display: block; width: 100%; height: auto; overflow: visible; }
+.cd-disc { fill: var(--cd-navy); }
+.cd-hub { fill: color-mix(in srgb, var(--cd-navy) 55%, #c9d3dc); }
+.cd-hub-line { fill: none; stroke: color-mix(in srgb, var(--cd-navy) 75%, #c9d3dc); stroke-width: 4; }
+.cd-ring { fill: none; stroke-width: 40; }
+.cd-ring-1 { stroke: var(--cd-ring-1); } .cd-ring-2 { stroke: var(--cd-ring-2); } .cd-ring-3 { stroke: var(--cd-ring-3); }
+.cd-text { fill: #fbfaf7; font-family: var(--display); font-weight: 800; }   /* text-anchor is set per word by topic-page.js */
+.cd:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+@media (prefers-reduced-motion: no-preference) {
+  .cd { transition: transform 0.15s ease; }
+  .cd:hover { transform: scale(1.03); }
+}
+.cd-arc { fill: none; }
+.cd-caption { margin: 0.5rem 0 0; text-align: center; font-size: 0.8rem; color: var(--ink-faint); }
+.cd-caption span { white-space: nowrap; }
+@media (max-width: 34rem) { .cd-caption { font-size: 0.74rem; } }
+
+/* Playlists, promises and every-bill pages, site review 2026-10-01 (topic-page.js). */
+.topic-notice { margin: 0 0 0.6rem; font-weight: 600; color: var(--ink); }
+.card-legend { margin: 0 0 1.2rem; max-width: 48rem; font-size: 0.82rem; line-height: 1.5; color: var(--ink-faint); }
+.card-legend span { margin-right: 0.5rem; }
+.card-legend strong { color: var(--ink-soft); font-weight: 600; }
+.card-legend-ai { display: block; margin-top: 0.2rem; }
+/* One measure for the list cards and the shuffled card: lines stop near 100 characters. */
+.topic-body .bill-cards, .topic-body .topic-counts { max-width: 48rem; }
+.shuffle + .bill-cards { margin-top: 1.4rem; }
+.one-line-list > li > .one-line { max-width: 48rem; }
+.plan-summary { margin-top: 0.8rem; font-size: 0.92rem; color: var(--ink-soft); }
+.plan-summary summary { cursor: pointer; color: var(--link); font-size: 0.85rem; }
+.plan-summary p { margin: 0.5rem 0 0; }
+.bill-card-flat .bill-card-cta { width: fit-content; text-decoration: none; }
+.bill-card-flat .bill-card-cta:hover { text-decoration: underline; }
+.now-playing-track { display: inline-block; margin-bottom: 0.6rem; font-size: 0.88rem; text-decoration: none; }
+.now-playing-track:hover { text-decoration: underline; }
+/* A playlist's shuffle highlights the chosen track in the list for a moment. */
+.bill-card.is-playing { border-color: var(--accent); box-shadow: 0 0 0 3px var(--hl-bg), 0 0 0 4px var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .topic-body .bill-card { transition: box-shadow 0.4s ease, border-color 0.4s ease; }
+}
+/* The status and promise filters. */
+.filter-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.5rem; margin: 0.6rem 0 0; }
+.filter-chips-label { font-size: 0.8rem; color: var(--ink-faint); margin-right: 0.2rem; }
+.filter-chip { font: inherit; font-size: 0.83rem; padding: 0.2rem 0.7rem; border: 1px solid var(--line-control); border-radius: 999px; background: transparent; color: var(--ink-soft); cursor: pointer; }
+.filter-chip:hover { border-color: var(--accent); color: var(--accent); }
+.filter-chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.filter-hidden { display: none !important; }
+/* The tab's landing cards list the bills keeping each promise. */
+.promise-card-count { margin: 0.2rem 0 0.2rem; font-size: 0.85rem; color: var(--ink-faint); }
+.promise-card-bills { list-style: none; margin: 0; padding: 0; font-size: 0.88rem; color: var(--ink-soft); }
+.promise-card-bills li { margin: 0.1rem 0; }
+.promise-card-more { color: var(--ink-faint); }
+/* Where a Next Playlist button leads, the tab's own next button below it is secondary. */
+.next-tab-has-playlist .btn-next:not(.btn-next-playlist) { background: transparent; color: var(--ink); border-color: var(--line); }
+.next-tab-has-playlist .btn-next:not(.btn-next-playlist):hover { background: transparent; color: var(--ink); border-color: var(--ink-soft); }
+
+/* ==========================================================================
+   Bill pages and search, 2026-10-01 review. Everything below is scoped to
+   law.html and search.html classes.
+   ========================================================================== */
+
+/* The bill header: one rule under the tabs, not a second one above them. */
+.law-header.law-header-bill { background: none; padding-bottom: 0; }
+.law-aka { margin: -0.3rem 0 0.5rem; font-size: 0.92rem; color: var(--ink-soft); }
+.law-meta { margin: 0 0 0.9rem; font-size: 0.85rem; color: var(--ink-faint); display: flex; flex-wrap: wrap; gap: 0.2rem 1.2rem; max-width: 46rem; }
+.law-asof { white-space: nowrap; }
+.law-meta[hidden], .tab-row[hidden], .related-bills[hidden] { display: none; }
+
+/* Scroll offsets follow the sticky header's measured height through html's
+   scroll-padding-top (top of this file); a scroll-margin here would add to it. */
+
+/* Bold is never bold (author, 2026-10-01): an amendment's new language is underlined, struck language struck. */
+.statute-body strong, .zoom-excerpt strong { font-weight: inherit; }
+ins { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; background: none; color: inherit; }
+del { text-decoration: line-through; color: var(--ink-faint); }
+.redline-key { font-family: var(--sans); font-size: 0.78rem; color: var(--ink-faint); margin: 0 0 0.7rem; }
+.statute-body blockquote { margin: 0.6rem 0 0.9rem; padding: 0.1rem 0 0.1rem 1rem; border-left: 3px solid var(--line); }
+.statute-body blockquote p { margin: 0 0 0.6rem; }
+
+/* Numbered lists print the source's own label (1., 4A.), and stay one list across blank lines. */
+ol.src-list { list-style: none; padding-left: 0; margin: 0 0 0.9rem; }
+ol.src-list > li { display: grid; grid-template-columns: 2.6em minmax(0, 1fr); margin: 0 0 0.55rem; }
+ol.src-list .li-num { font-variant-numeric: tabular-nums; color: var(--ink-soft); }
+
+/* Pipe tables, scrollable sideways on a narrow screen. */
+.table-wrap { overflow-x: auto; margin: 0.6rem 0 1rem; max-width: 100%; }
+.table-wrap:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.md-table { border-collapse: collapse; font-size: 0.9rem; min-width: 24rem; }
+.md-table th, .md-table td { border: 1px solid var(--line); padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+.md-table th { background: var(--accent-bg); font-weight: 600; }
+
+/* Section cards: the heading wraps the toggle; it keeps the card's own type size. */
+.zoom-h { margin: 0; font: inherit; }
+.zoom-section.zoom-note { background: var(--paper); border-style: dashed; }
+.note-label { display: block; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); margin: 0 0 0.15rem; }
+.zoom-head .note-label { grid-column: 1; }
+.statute-note .statute-body { color: var(--ink-soft); }
+.statute-note p.note-label { margin: -0.3rem 0 0.6rem; }
+.point-lead { font-family: var(--display); font-style: italic; color: var(--ink-soft); margin: 0.9rem 0 0.3rem; max-width: var(--max-measure); }
+.law-theory { max-width: 46rem; }
+.law-theory p { margin: 0 0 0.7rem; }
+.intro-label { font-family: var(--mono); font-size: 0.7rem; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.4rem; }
+.intro-source { font-size: 0.82rem; color: var(--ink-faint); }
+h2.statute-part { font-weight: 400; }
+
+/* The policy tab beside its parts index on a wide screen. */
+.policy-layout.has-index { display: grid; grid-template-columns: minmax(0, 52rem) minmax(11rem, 15rem); gap: 2.5rem; align-items: start; }
+.policy-index { position: sticky; top: calc(var(--header-h, 8rem) + 1rem); max-height: calc(100vh - var(--header-h, 8rem) - 2rem); overflow-y: auto; font-size: 0.85rem; }
+.policy-index > summary, .toc-disclosure > summary { display: none; }
+.policy-index-nav a { display: block; color: var(--ink-soft); text-decoration: none; padding: 0.2rem 0; }
+.policy-index-nav a:hover { color: var(--accent); }
+
+/* Read the law: headings are links, with copy controls beside them. */
+.statute-heading-row { display: flex; align-items: baseline; justify-content: space-between; gap: 0.4rem 1rem; flex-wrap: wrap; margin: 0 0 0.7rem; }
+.statute-heading-row .statute-heading { margin: 0; }
+.sec-link { color: inherit; text-decoration: none; }
+.sec-link:hover { color: var(--accent); text-decoration: underline; }
+.sec-tools { display: inline-flex; gap: 0.5rem; align-items: center; }
+.copy-link, .cite-btn { font: inherit; font-family: var(--sans); font-size: 0.74rem; font-weight: 600; color: var(--accent); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 0.1rem 0.55rem; cursor: pointer; white-space: nowrap; }
+.copy-link:hover, .cite-btn:hover { border-color: var(--accent); }
+.copy-link.is-done, .cite-btn.is-done { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.cite-btn { font-size: 0.68rem; vertical-align: 0.1em; }
+.subsec.is-highlighted { background: var(--hl-bg); border-radius: var(--radius); }
+.copy-scratch { position: fixed; left: -9999px; top: 0; }
+a.xref, a.bill-ref { text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+
+/* The contents list: sticky below the header, the section on screen marked. */
+.toc-disclosure { position: sticky; top: calc(var(--header-h, 8rem) + 1rem); max-height: calc(100vh - var(--header-h, 8rem) - 2rem); overflow-y: auto; }
+.toc-disclosure .notes-toc { position: static; max-height: none; overflow: visible; }
+.notes-toc a[aria-current] { color: var(--ink); font-weight: 600; box-shadow: inset 2px 0 0 var(--accent); padding-left: 0.5rem; }
+.notes-toc a.toc-note { font-style: italic; }
+@media (max-width: 55rem) {
+  .policy-layout.has-index { grid-template-columns: minmax(0, 1fr); }
+  .policy-index { position: static; max-height: none; order: -1; margin-bottom: 1rem; }
+  .toc-disclosure { position: static; max-height: none; overflow: visible; }
+  .policy-index > summary, .toc-disclosure > summary { display: list-item; cursor: pointer; font-weight: 600; font-size: 0.92rem; padding: 0.55rem 0.8rem; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper-raised); }
+  .policy-index[open] > summary, .toc-disclosure[open] > summary { margin-bottom: 0.6rem; }
+}
+
+/* Related bills, and the back-to-top control on a long bill. */
+.related-bills { padding: 1.5rem 0 0.5rem; border-top: 1px solid var(--line-soft); }
+.related-title { font-family: var(--display); font-size: 1.05rem; margin: 0 0 0.3rem; }
+.related-lead { font-size: 0.88rem; color: var(--ink-faint); margin: 0 0 0.6rem; }
+.related-list { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem; }
+.related-list a { display: inline-block; font-size: 0.88rem; padding: 0.2rem 0.7rem; border: 1px solid var(--line-control); border-radius: 999px; text-decoration: none; color: var(--ink-soft); }
+.related-list a:hover { border-color: var(--accent); color: var(--accent); }
+.back-to-top { position: fixed; right: 1rem; bottom: 1rem; z-index: 30; font: inherit; font-size: 0.82rem; font-weight: 600; padding: 0.45rem 0.85rem; border-radius: 999px; border: 1px solid var(--line); background: var(--paper-raised); color: var(--accent); cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); opacity: 0; visibility: hidden; transition: opacity 0.15s; }
+.back-to-top.is-shown { opacity: 1; visibility: visible; }
+.back-to-top:hover { border-color: var(--accent); }
+
+/* Search: filters, grouped results, suggestions. */
+.search-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.9rem 0 0; }
+.search-filter { font: inherit; font-size: 0.82rem; padding: 0.2rem 0.7rem; border: 1px solid var(--line-control); border-radius: 999px; background: transparent; color: var(--ink-soft); cursor: pointer; }
+.search-filter[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+.search-group { margin: 1.4rem 0 0; }
+.search-group-title { font-family: var(--display); font-size: 1rem; margin: 0 0 0.2rem; }
+.search-group-title a { color: var(--ink); text-decoration: none; }
+.search-group-title a:hover { color: var(--accent); }
+.search-group-count { font-family: var(--mono); font-size: 0.7rem; color: var(--ink-faint); margin-left: 0.4rem; font-weight: 400; }
+.search-chips { display: flex; flex-wrap: wrap; gap: 0.4rem 0.5rem; margin: 0.6rem 0 0; padding: 0; list-style: none; }
+.search-chips a { display: inline-block; font-size: 0.88rem; padding: 0.2rem 0.75rem; border: 1px solid var(--line-control); border-radius: 999px; text-decoration: none; color: var(--ink-soft); }
+.search-chips a:hover { border-color: var(--accent); color: var(--accent); }
+.search-suggest { margin: 0 0 0.6rem; }
+.search-more { margin-top: 1.2rem; }
+.bill-card.is-highlighted { box-shadow: 0 0 0 3px var(--hl-bg), 0 0 0 4px var(--accent); }
+
+/* On a phone every chip is a 40 px target. */
+@media (max-width: 40rem) {
+  .search-filter, .filter-chip, .family-jumps a, .progress-jump a, .search-chips a {
+    display: inline-flex; align-items: center; min-height: 40px;
+  }
+}
+
+/* A progress row names its status, and the three measures that are not bills say what
+   they are, with the pills the bill cards use. A stub card links to its row, which opens
+   and is marked on arrival. */
+.progress-bill-head { min-width: 0; }
+.progress-bill-head .pill-status { margin-left: 0.5rem; vertical-align: 0.1em; }
+.progress-bill-head .pill-kind { vertical-align: 0.1em; }
+.progress-bill.is-highlighted > details > summary { background: var(--hl-bg); border-radius: var(--radius); }
+@media (max-width: 40rem) {
+  .progress-bill-head { grid-column: 2; grid-row: 1; }
+}
+
+/* The one line a page shows when it cannot load, and the line shown without script. */
+.load-error { margin: 1.5rem 0; font-weight: 600; color: var(--ink); }
+
+/* The page a missing address lands on. */
+.not-found { padding: 3rem 0; }
+
+.print-only { display: none; }
+@media print {
+  /* Paper is light whatever the screen's theme: the light tokens again, under selectors as
+     specific as the two dark blocks and later than them, so they win under either. */
+  :root[data-theme="dark"], :root:not([data-theme="dark"]) {
+    --ink: #1a1d23; --ink-soft: #444a55; --ink-faint: #646a75;
+    --paper: #fbfaf7; --paper-raised: #ffffff;
+    --line: #dcd8cf; --line-soft: #eae7df; --line-control: #8a857b;
+    --accent: #1c3d5a; --accent-press: #0f2a40; --on-accent: #ffffff; --accent-bg: #eef2f6;
+    --hl-bg: #f1eee6; --link: #1c3d5a; --focus: #1d5bd6; --error: #b42318;
+    --p1: #ba801b; --p1-on: #1a1d23; --p1-text: #8a5f14;
+    --p2: #0a5043; --p2-on: #ffffff; --p2-text: #0a5043;
+    --p3: #8d6bc3; --p3-on: #ffffff; --p3-text: #7453a8;
+    color-scheme: light;
+  }
+  .site-header, .site-footer, .tab-row, .crumbs, .toc-disclosure, .notes-toc, .policy-index, .prev-next,
+  .next-tab, .related-bills, .back-to-top, .why-link, .copy-link, .cite-btn, .why-btn, .zoom-hint,
+  .sec-tools, .skip-link, #panel-policy, .law-promises { display: none !important; }
+  .print-only { display: block; }
+  .print-note { font-size: 9pt; color: #444; margin: 0 0 0.6rem; }
+  #panel-text, #panel-text[hidden] { display: block !important; padding: 0; }
+  body { background: #fff; color: #000; font-size: 10.5pt; }
+  .wrap { padding: 0 !important; max-width: none; }
+  .law-header { padding-top: 0; }
+  .notes-layout { display: block; padding: 0; }
+  .statute { max-width: none; }
+  .statute-section { padding: 0.5rem 0; border-bottom: 0; }
+  .statute-heading, .statute-heading-row, .statute-part { break-after: avoid; page-break-after: avoid; }
+  blockquote, tr, .note-label { break-inside: avoid; page-break-inside: avoid; }
+  .table-wrap { overflow: visible; }
+  a { color: inherit; text-decoration: none; }
+  mark { background: none; }
+}
+
+/* Bill page: site review 2 */
+
+/* A bill with no policy tab: the header draws the rule the tab row drew, and the text
+   below it has one layer of top padding, the panel's, not the panel's and the layout's. */
+.law-header.law-header-bill.is-single {
+  padding-bottom: 1.6rem;
+  background: linear-gradient(var(--line), var(--line)) no-repeat left var(--gutter) bottom / calc(100% - 2 * var(--gutter)) 1px;
+}
+.tab-panel > .notes-layout { padding: 0; }
+#panel-text .statute > .statute-part:first-child { margin-top: 0; }
+#panel-text .statute > .statute-section:first-child { padding-top: 0; }
+.text-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.2rem 0.9rem; margin: 0 0 1.6rem; }
+.text-title { font-family: var(--display); font-size: 1.3rem; margin: 0; }
+.text-count { margin: 0; font-size: 0.85rem; color: var(--ink-faint); }
+.part-intro { max-width: var(--max-measure); color: var(--ink-soft); }
+
+/* Copy citation sits outside the text flow, below the right end of its paragraph, and
+   is hidden (so neither focusable nor copied with the text) until the paragraph is
+   hovered, tapped on a touch screen, or targeted by a link. */
+.subsec { position: relative; }
+.subsec .cite-btn {
+  position: absolute; right: 0; top: calc(100% - 0.55rem); z-index: 2;
+  visibility: hidden; opacity: 1;
+  background: var(--paper-raised); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  -webkit-user-select: none; user-select: none;
+}
+.subsec.cite-on .cite-btn, .subsec:target .cite-btn, .subsec .cite-btn.is-done { visibility: visible; opacity: 1; }
+.subsec .cite-btn.is-done { background: var(--accent); }
+@media (hover: hover) {
+  .subsec:hover .cite-btn { visibility: visible; opacity: 1; }
+}
+.copy-link { -webkit-user-select: none; user-select: none; }
