@@ -1,0 +1,47 @@
+# This file asks crawlers not to index the site and not to use it for AI
+# training. It is a request, not access control: a crawler that ignores it is
+# not stopped. Admitting search engines comes later, with a separate file.
+
+User-agent: *
+Disallow: /
+
+# Named separately because several of these ignore a wildcard Disallow but honor
+# their own token.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: meta-externalagent
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
